@@ -2,7 +2,10 @@ package com.example.android.justjava;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -24,11 +27,16 @@ public class MainActivity extends ActionBarActivity {
      * Create a summary of the order
      *
      * @param price of the order
+     * @param addWhippedCream is whether or not the user wants whipped cream topping
+     * @param addChocolate is whether or not the user wants chocolate
+     * @param name of the customer
      * @return text summary
      */
 
-    private String createOrderSummary(int price) {
-        String priceMessage = "Name: Kaptain Kunal";
+    private String createOrderSummary(String name, int price, boolean addWhippedCream, boolean addChocolate) {
+        String priceMessage = "Name: " + name;
+        priceMessage += "\nAdd Whipped Cream? " + addWhippedCream;
+        priceMessage += "\nAdd Chocolate? " + addChocolate;
         priceMessage += "\nQuantity: " + quantity;
         priceMessage += "\nTotal $" + price;
         priceMessage += "\nThank you!";
@@ -39,8 +47,18 @@ public class MainActivity extends ActionBarActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
+        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
+        boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
+
+        CheckBox ChocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = ChocolateCheckBox.isChecked();
+
+        EditText nameField = (EditText) findViewById(R.id.name_field);
+        String name = nameField.getText().toString();
+
         int price = calculatePrice();
-        displayMessage(createOrderSummary(price));
+        String priceMessage = createOrderSummary(name, price, hasWhippedCream, hasChocolate);
+        displayMessage(priceMessage);
     }
 
     /**
